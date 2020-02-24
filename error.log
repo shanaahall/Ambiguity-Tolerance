@@ -1,0 +1,13 @@
+invalid command name ".dialog1.text"
+invalid command name ".dialog1.text"
+    while executing
+"$w cget -state"
+    (procedure "tk::TextPasteSelection" line 15)
+    invoked from within
+"tk::TextPasteSelection .dialog1.text 78 56"
+    invoked from within
+"if {$tk_strictMotif || ![info exists tk::Priv(mouseMoved)]
+	|| !$tk::Priv(mouseMoved)} {
+	tk::TextPasteSelection .dialog1.text 78 56
+    }"
+    (command bound to event)
