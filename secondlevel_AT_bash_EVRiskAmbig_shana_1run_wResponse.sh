@@ -68,7 +68,7 @@ RunFile_03=${FSL_1stDATADIR}/${BIACID}_AT${RUN3}.feat
 mkdir -p ${OUTPUT}
 
 cd ${TEMPLATE}
-for i in 'secondlevel_AT_design_EVRiskAmbig_shana_1run_wResp.fsf'; do
+for i in 'secondlevel_AT_design_EVRiskAmbig_shana_1run_wResponse.fsf'; do
 sed -e 's@OUTPUT@'$OUTPUT'@g'\
  -e 's@RunFile_01@'$RunFile_01'@g'\
  -e 's@RunFile_02@'$RunFile_02'@g' <$i> ${OUTPUT}/${BIACID}.fsf

@@ -59,7 +59,7 @@ def main(argv = sys.argv):
     runs=['1','2','3']
     lookuptable = os.path.join(scriptdir,'Lookup','decide_AT_batch_lookup_singlesubj.txt')
     #indirbase=os.path.join(homedir,project,'Analysis/Behavioral/combined_AT_files/AT_Timing_2016_0805','')
-    indirbase=os.path.join(homedir,project,'Notes/AT_Timing_Responses_2','')
+    indirbase=os.path.join(homedir,project,'Notes/AT_Timing_Responses_1','')
     outdirbase = os.path.join(bidsdir,'AmbiguityTolerance','Timing','')
 
     lookupdf = pd.read_csv(lookuptable,sep='\t')

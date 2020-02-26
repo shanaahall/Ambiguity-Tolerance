@@ -69,15 +69,28 @@ done
 for i in $OUTFSF; do
 echo $i
 if [ -f "$RISKYCERT" ]; then
-    sed -e 's@RISKYCERT@'$RISKYCERT'@g' <$i> ${OUTFSF}.tmp && mv ${OUTFSF}.tmp ${OUTFSF}
-else
-    EVLINENUM=$(grep -rn 'RISKYCERT' $i | awk -F ":" '{print $1}')
-    EVLINE=$(sed -n ${EVLINENUM}'p' $i)
-    EVNUM=$(echo ${EVLINE:15:1})
+    sed -e 's@RISKYCERT@'$RISKYCERT'@g' <$i> ${OUTFSF}.tmp && mv ${OUTFSF}.tmp ${OUTFSF} #If the onset file exists, sub the name of the onset file into the design file
+else # if the onset file does not exist:
+    EVLINENUM=$(grep -rn 'RISKYCERT' $i | awk -F ":" '{print $1}') #Find the line number where the EV number is defined
+    EVLINE=$(sed -n ${EVLINENUM}'p' $i) #Go to that line
+    EVNUM=$(echo ${EVLINE:15:1}) #Extract the EV number
+    let EVNUMCON=$EVNUM*2-1
     sed -e 's@set fmri(shape'$EVNUM') 3@set fmri(shape'$EVNUM') 10@g' \
 -e 's@set fmri(convolve'$EVNUM') 3@set fmri(convolve'$EVNUM') 0@g' \
+-e 's@set fmri(con_real1.'$EVNUMCON') 1.0@set fmri(con_real1.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real2.'$EVNUMCON') 1.0@set fmri(con_real2.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') 1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') 1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') -1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') -1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_orig1.'$EVNUM') 1.0@set fmri(con_orig1.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig2.'$EVNUM') 1.0@set fmri(con_orig2.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') 1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') 1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') -1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') -1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
 -e '/# Custom EV file (EV '$EVNUM')/d' \
--e '/set fmri(custom'$EVNUM') "RISKYCERT"/d' <$i> ${OUTFSF}.tmp && mv ${OUTFSF}.tmp ${OUTFSF}
+-e '/set fmri(custom'$EVNUM') "RISKYCERT"/d' <$i> ${OUTFSF}.tmp && mv ${OUTFSF}.tmp ${OUTFSF} #Make the onset file equal 10 (Empty). Make the convolution 0 (None). Delete the Custom EV file lines. 
 fi
 
 if [ -f "$RISKYUNCERT" ]; then
@@ -86,8 +99,21 @@ else
     EVLINENUM=$(grep -rn 'RISKYUNCERT' $i | awk -F ":" '{print $1}')
     EVLINE=$(sed -n ${EVLINENUM}'p' $i)
     EVNUM=$(echo ${EVLINE:15:1})
+    let EVNUMCON=$EVNUM*2-1
     sed -e 's@set fmri(shape'$EVNUM') 3@set fmri(shape'$EVNUM') 10@g' \
 -e 's@set fmri(convolve'$EVNUM') 3@set fmri(convolve'$EVNUM') 0@g' \
+-e 's@set fmri(con_real1.'$EVNUMCON') 1.0@set fmri(con_real1.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real2.'$EVNUMCON') 1.0@set fmri(con_real2.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') 1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') 1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') -1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') -1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_orig1.'$EVNUM') 1.0@set fmri(con_orig1.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig2.'$EVNUM') 1.0@set fmri(con_orig2.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') 1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') 1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') -1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') -1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
 -e '/# Custom EV file (EV '$EVNUM')/d' \
 -e '/set fmri(custom'$EVNUM') "RISKYUNCERT"/d' <$i> ${OUTFSF}.tmp && mv ${OUTFSF}.tmp ${OUTFSF}
 fi
@@ -99,8 +125,21 @@ else
     EVLINENUM=$(grep -rn 'AMBIGCERT' $i | awk -F ":" '{print $1}')
     EVLINE=$(sed -n ${EVLINENUM}'p' $i)
     EVNUM=$(echo ${EVLINE:15:1})
+    let EVNUMCON=$EVNUM*2-1
     sed -e 's@set fmri(shape'$EVNUM') 3@set fmri(shape'$EVNUM') 10@g' \
 -e 's@set fmri(convolve'$EVNUM') 3@set fmri(convolve'$EVNUM') 0@g' \
+-e 's@set fmri(con_real1.'$EVNUMCON') 1.0@set fmri(con_real1.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real2.'$EVNUMCON') 1.0@set fmri(con_real2.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') 1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') 1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') -1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') -1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_orig1.'$EVNUM') 1.0@set fmri(con_orig1.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig2.'$EVNUM') 1.0@set fmri(con_orig2.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') 1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') 1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') -1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') -1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
 -e '/# Custom EV file (EV '$EVNUM')/d' \
 -e '/set fmri(custom'$EVNUM') "AMBIGCERT"/d' <$i> ${OUTFSF}.tmp && mv ${OUTFSF}.tmp ${OUTFSF}
 fi
@@ -111,8 +150,21 @@ else
     EVLINENUM=$(grep -rn 'AMBIGUNCERT' $i | awk -F ":" '{print $1}')
     EVLINE=$(sed -n ${EVLINENUM}'p' $i)
     EVNUM=$(echo ${EVLINE:15:1})
+    let EVNUMCON=$EVNUM*2-1
     sed -e 's@set fmri(shape'$EVNUM') 3@set fmri(shape'$EVNUM') 10@g' \
 -e 's@set fmri(convolve'$EVNUM') 3@set fmri(convolve'$EVNUM') 0@g' \
+-e 's@set fmri(con_real1.'$EVNUMCON') 1.0@set fmri(con_real1.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real2.'$EVNUMCON') 1.0@set fmri(con_real2.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') 1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') 1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') -1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') -1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_orig1.'$EVNUM') 1.0@set fmri(con_orig1.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig2.'$EVNUM') 1.0@set fmri(con_orig2.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') 1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') 1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') -1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') -1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
 -e '/# Custom EV file (EV '$EVNUM')/d' \
 -e '/set fmri(custom'$EVNUM') "AMBIGUNCERT"/d' <$i> ${OUTFSF}.tmp && mv ${OUTFSF}.tmp ${OUTFSF}
 fi 
@@ -123,8 +175,21 @@ else
     EVLINENUM=$(grep -rn 'RISKYMISSED' $i | awk -F ":" '{print $1}')
     EVLINE=$(sed -n ${EVLINENUM}'p' $i)
     EVNUM=$(echo ${EVLINE:15:1})
+    let EVNUMCON=$EVNUM*2-1
     sed -e 's@set fmri(shape'$EVNUM') 3@set fmri(shape'$EVNUM') 10@g' \
 -e 's@set fmri(convolve'$EVNUM') 3@set fmri(convolve'$EVNUM') 0@g' \
+-e 's@set fmri(con_real1.'$EVNUMCON') 1.0@set fmri(con_real1.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real2.'$EVNUMCON') 1.0@set fmri(con_real2.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') 1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') 1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') -1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') -1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_orig1.'$EVNUM') 1.0@set fmri(con_orig1.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig2.'$EVNUM') 1.0@set fmri(con_orig2.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') 1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') 1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') -1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') -1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
 -e '/# Custom EV file (EV '$EVNUM')/d' \
 -e '/set fmri(custom'$EVNUM') "RISKYMISSED"/d' <$i> ${OUTFSF}.tmp && mv ${OUTFSF}.tmp ${OUTFSF}
 fi 
@@ -135,8 +200,21 @@ else
     EVLINENUM=$(grep -rn 'AMBIGMISSED' $i | awk -F ":" '{print $1}')
     EVLINE=$(sed -n ${EVLINENUM}'p' $i)
     EVNUM=$(echo ${EVLINE:15:1})
+    let EVNUMCON=$EVNUM*2-1
     sed -e 's@set fmri(shape'$EVNUM') 3@set fmri(shape'$EVNUM') 10@g' \
 -e 's@set fmri(convolve'$EVNUM') 3@set fmri(convolve'$EVNUM') 0@g' \
+-e 's@set fmri(con_real1.'$EVNUMCON') 1.0@set fmri(con_real1.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real2.'$EVNUMCON') 1.0@set fmri(con_real2.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') 1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') 1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real3.'$EVNUMCON') -1.0@set fmri(con_real3.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_real4.'$EVNUMCON') -1.0@set fmri(con_real4.'$EVNUMCON') 0.0@g' \
+-e 's@set fmri(con_orig1.'$EVNUM') 1.0@set fmri(con_orig1.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig2.'$EVNUM') 1.0@set fmri(con_orig2.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') 1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') 1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig3.'$EVNUM') -1.0@set fmri(con_orig3.'$EVNUM') 0.0@g' \
+-e 's@set fmri(con_orig4.'$EVNUM') -1.0@set fmri(con_orig4.'$EVNUM') 0.0@g' \
 -e '/# Custom EV file (EV '$EVNUM')/d' \
 -e '/set fmri(custom'$EVNUM') "AMBIGMISSED"/d' <$i> ${OUTFSF}.tmp && mv ${OUTFSF}.tmp ${OUTFSF}
 fi 

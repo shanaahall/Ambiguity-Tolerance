@@ -39,16 +39,20 @@ echo "----JOB [$JOB_NAME.$JOB_ID] START [`date`] on HOST [$HOSTNAME]----"
 
 
 scriptdir=${EXPERIMENT}/Scripts/AT_scripts/shana
-designfile1=thirdlevel_AT_design_AmbigVRisk_noHighSkipSubs_GM_asOneGroup_wGroupsAlone_wResponse.fsf
-#designfile2=thirdlevel_AT_design_Ambig_noHighSkipSubs_GM_asOneGroup_wGroupsAlone.fsf
+designfile1=thirdlevel_AT_design_AmbigVRisk_GM_asOneGroup_wGroupsAlone_fixedFX_wResponse.fsf
+designfile2=thirdlevel_AT_design_Risk_GM_asOneGroup_wGroupsAlone_wResponse.fsf
+designfile3=thirdlevel_AT_design_Ambig_GM_asOneGroup_wGroupsAlone_wResponse.fsf
+designfile4=thirdlevel_AT_design_RiskVAmbig_GM_asOneGroup_wGroupsAlone_wResponse.fsf
 
 
 FSLDIR=/usr/local/packages/fsl-5.0.9
 export FSLDIR
 source ${FSLDIR}/etc/fslconf/fsl.sh 
 
-feat ${scriptdir}/${designfile1}
+#feat ${scriptdir}/${designfile1}
 #feat ${scriptdir}/${designfile2}
+#feat ${scriptdir}/${designfile3}
+feat ${scriptdir}/${designfile4}
 
 # -- END USER SCRIPT -- #
 
